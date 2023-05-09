@@ -1,11 +1,14 @@
 Package: whichdist
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Assess the Best-Fitting Distribution For a Continuous Variable
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Amanda Wang
+Maintainer: Amanda Wang <amanda.m.wang21@gmail.com>
+Description: With this function, the user can input a continuous count metric they aim to use as the outcome variable in an analysis and assess which type of regression to run.    
+     Potential suggestions include OLS linear regression, poisson regression, negative binomial regression, zero-inflated poisson regression, and zero-inflated negative binomial regression.
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
