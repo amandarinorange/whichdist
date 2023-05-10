@@ -17,11 +17,11 @@
 #' @importFrom fitdistrplus "fitdist"
 #' @importFrom stats "pchisq"
 #' @importFrom pscl "zeroinfl"
-#' @import gamlss.dist
-#' @import emdbook
+#' @importFrom gamlss.dist "ZIP"
+#' @importFrom emdbook "dzinbinom"
 
 
-evaluateDist <- function(df, countvar, diagnostics = FALSE) {
+whichdist <- function(df, countvar, diagnostics = FALSE) {
   suppressWarnings({
     options(stringsAsFactors = F)
 
