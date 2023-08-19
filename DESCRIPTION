@@ -1,6 +1,6 @@
 Package: whichdist
 Type: Package
-Title: Assess the Best-Fitting Distribution For a Continuous Variable
+Title: Assess the Best-Fitting Distribution For a Count Variable
 Version: 0.1.0
 Author: Amanda Wang
 Maintainer: Amanda Wang <amanda.m.wang21@gmail.com>
@@ -9,6 +9,14 @@ Description: With this function, the user can input a continuous count metric th
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    dplyr,
+    MASS,
+    stats,
+    pscl,
+    fitdistrplus,
+    gamlss,
+    emdbook
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
