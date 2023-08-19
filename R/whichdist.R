@@ -66,7 +66,7 @@ whichdist <- function(df, countvar, diagnostics = FALSE) {
       # mean and dispersion of nonzero portion of normalised counts
       estmu = sum((!counts0) * df[,col_ind])/nn0
       s2 = sum((!counts0) * (df[,col_ind] - estmu)^2)/(nn0 - 1)
-      disp =  1 / (estmu^2/(s2 - estmu + 1e-04))
+      disp =  abs(1 / (estmu^2/(s2 - estmu + 1e-04)))
 
       # fit lm regression with fitdistrplus
       tmp.fit.lm.wo <- try(fitdistrplus::fitdist(data = df[,col_ind], 'norm'), silent = TRUE)
@@ -191,10 +191,10 @@ whichdist <- function(df, countvar, diagnostics = FALSE) {
       # list result object:
       if (diagnostics == TRUE) {
         return(list(goodness_of_fit_metrics=gof.res, likelihood_ratio_test_results = lrt_res, estimates=estimate.res,
-                    paste0("results suggest that your data best fit a ", suggested_model)))
+                    paste0("results suggest that the variable ", countvar, " best fits a ", suggested_model)))
       }
       if (diagnostics == FALSE) {
-        return(paste0("results suggest that your data best fit a ", suggested_model))
+        return(paste0("results suggest that the variable ", countvar, " best fits a ", suggested_model))
       }
     }
   })
