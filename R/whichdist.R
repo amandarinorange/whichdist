@@ -3,11 +3,11 @@
 ####################################################
 #' @name whichdist
 #' @aliases whichdist
-#' @title Assess the Best-Fitting Distribution For a Continuous Variable
+#' @title Assess the Best-Fitting Distribution For a Count Variable
 #' @description With this function, the user can input a continuous count metric they aim to use as the outcome variable in an analysis and assess which type of regression to run
 #' @usage whichdist(df, countvar, diagnostics = FALSE)
 #' @param df The dataframe in which the count variable is a column
-#' @param countvar - A column of integer values -- i.e., a count metric -- that the user intends to evaluate
+#' @param countvar - A column of integer values -- i.e., a count metric -- that the user intends to evaluate. No nulls.
 #' @param diagnostics - Boolean, whether the function should return goodness-of-fit metrics in addition to the recommended regression model. Default is FALSE.
 #' @return A list object with the recommended regression and best-fitting statistical distribution. Also returns results of goodness of fit and estimated parameters when diagnostics is set to TRUE.
 #' @export
@@ -169,32 +169,39 @@ whichdist <- function(df, countvar, diagnostics = FALSE) {
 
       lowest_aic_model <- colnames(gof.res[gof.res$metric == "aic",c(2:ncol(gof.res))])[apply(gof.res[gof.res$metric == "aic",c(2:ncol(gof.res))], 1, which.min)]
       if (grepl(pattern = "normal", x = lowest_aic_model, ignore.case = T)) {
-        suggested_model <- "normal distribution: try a t-test, linear regression, or ANOVA"
+        suggested_model_message <- "normal distribution: try a t-test, linear regression, or ANOVA"
+        suggested_model <- "lm"
       }
 
       if (grepl(pattern = "^pois", x = lowest_aic_model, ignore.case = T)) {
-        suggested_model <- "Poisson distribution: try glm() with family = 'poisson'"
+        suggested_model_message <- "Poisson distribution: try glm() with family = 'poisson'"
+        suggested_model <- "poisson"
       }
 
       if (grepl(pattern = "^nbinom", x = lowest_aic_model, ignore.case = T)) {
-        suggested_model <- "negative binomial distribution: try glm.nb() from MASS package"
+        suggested_model_message <- "negative binomial distribution: try glm.nb() from MASS package"
+        suggested_model <- "negbin"
       }
 
       if (grepl(pattern = "^zifpois", x = lowest_aic_model, ignore.case = T)) {
-        suggested_model <- "zero-inflated Poisson distribution: try zeroinfl() from pscl package with dist = 'poisson'"
+        suggested_model_message <- "zero-inflated Poisson distribution: try zeroinfl() from pscl package with dist = 'poisson'"
+        suggested_model <- "zip"
       }
 
       if (grepl(pattern = "^zifnbinom", x = lowest_aic_model, ignore.case = T)) {
-        suggested_model <- "zero-inflated negative binomial distribution: try zeroinfl() from pscl package with dist = 'negbin'"
+        suggested_model_message <- "zero-inflated negative binomial distribution: try zeroinfl() from pscl package with dist = 'negbin'"
+        suggested_model <- "zinb"
       }
 
       # list result object:
       if (diagnostics == TRUE) {
         return(list(goodness_of_fit_metrics=gof.res, likelihood_ratio_test_results = lrt_res, estimates=estimate.res,
-                    paste0("results suggest that the variable ", countvar, " best fits a ", suggested_model)))
+                    recommendation = paste0("results suggest that the variable ", countvar, " best fits a ", suggested_model_message),
+                    model = suggested_model))
       }
       if (diagnostics == FALSE) {
-        return(paste0("results suggest that the variable ", countvar, " best fits a ", suggested_model))
+        return(list(recommendation = paste0("results suggest that the variable ", countvar, " best fits a ", suggested_model_message),
+                    model = suggested_model))
       }
     }
   })
